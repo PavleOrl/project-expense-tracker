@@ -1,0 +1,30 @@
+/* Application-wide styles - Bootstrap does most of the work, these are only small additions */
+
+h2 {
+    color: #369;
+    font-weight: lighter;
+}
+
+h4 {
+    color: #444;
+    font-weight: lighter;
+}
+
+/* the bars of the component CategoryTotals */
+
+.progress {
+    height: .6rem;
+}
+
+/* the page categories: the fields of the table must not become too narrow */
+
+.categories input {
+    min-width: 9em;
+}
+
+/* the messages at the bottom of every page */
+
+.messages .card-header {
+    background-color: #fff3f3;
+    color: #a80000;
+}

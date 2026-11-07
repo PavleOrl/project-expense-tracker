@@ -1,0 +1,14 @@
+# The Python packages of these samples. Install them once, in this folder:
+#
+#   python -m venv .venv
+#   .venv\Scripts\activate             (macOS:  source .venv/bin/activate)
+#   pip install -r requirements.txt
+#
+# pip installs the newest versions that work with your Python (3.12 or newer).
+
+fastapi            # web framework: pages and RESTful services
+uvicorn            # web server that runs FastAPI applications
+jinja2             # HTML templates
+httpx2             # HTTP client: calling RESTful services from Python
+sqlmodel           # working with a relational database through Python classes
+python-multipart   # reading the data of HTML forms

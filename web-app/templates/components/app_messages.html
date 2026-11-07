@@ -1,0 +1,22 @@
+{#
+    The component AppMessages shows the messages of the application.
+    It has no parameters: it takes the messages from the messaging service,
+    which is available in every template (see templating.py).
+#}
+{% macro AppMessages() %}
+{% if messaging_service.get() %}
+<div class="messages card mt-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>Messages</strong>
+        <form action="/messages/clear" method="post" class="m-0">
+            <button class="btn btn-sm btn-outline-secondary">Clear</button>
+        </form>
+    </div>
+    <ul class="list-group list-group-flush">
+        {% for msg in messaging_service.get() | reverse %}
+        <li class="list-group-item py-1 small">{{ msg }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% endmacro %}

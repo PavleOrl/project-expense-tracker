@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% from "components/expense_form.html" import ExpenseForm %}
+
+{% block content %}
+<h2>{{ expense.description }}</h2>
+
+<dl class="row mt-3">
+    <dt class="col-sm-2">id</dt>
+    <dd class="col-sm-10">{{ expense.id }}</dd>
+    <dt class="col-sm-2">date</dt>
+    <dd class="col-sm-10">{{ expense.date.strftime("%d.%m.%Y") }}</dd>
+    <dt class="col-sm-2">category</dt>
+    <dd class="col-sm-10"><span class="badge badge-info">{{ expense.category_name }}</span></dd>
+    <dt class="col-sm-2">amount</dt>
+    <dd class="col-sm-10">{{ expense.amount | money }}</dd>
+</dl>
+
+<div class="card">
+    <div class="card-header"><strong>Change</strong></div>
+    <div class="card-body pb-0">
+        {{ ExpenseForm("/expensedetail/" ~ expense.id, categories, expense=expense, button="Save") }}
+    </div>
+</div>
+
+<a class="btn btn-link mt-3 pl-0" href="/expenses">&larr; Back to all expenses</a>
+{% endblock %}

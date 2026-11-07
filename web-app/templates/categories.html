@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2>Categories</h2>
+<p class="text-muted">
+    The monthly budget is how much you plan to spend in a category in one month (0 - no budget).
+    A category that still has expenses can not be deleted.
+</p>
+
+<form class="form-inline mb-4" action="/categories" method="post">
+    <input class="form-control mr-2 mb-2" name="name" required maxlength="100" placeholder="New category">
+    <input type="number" class="form-control mr-2 mb-2" name="monthly_budget" min="0" step="0.01"
+        placeholder="Monthly budget (RSD)">
+    <button class="btn btn-primary mb-2">Add</button>
+</form>
+
+{# table-responsive: on a narrow screen the table scrolls sideways instead of being squeezed #}
+<div class="table-responsive">
+<table class="table categories">
+    <thead class="thead-light">
+        <tr>
+            <th>Name</th>
+            <th>Monthly budget (RSD)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in categories %}
+        <tr>
+            {#
+                The fields of a row belong to the form of that row through the attribute form="..."
+                (a form can not be placed around a row of a table).
+            #}
+            <td>
+                <input class="form-control" form="save-{{ c.id }}" name="name" value="{{ c.name }}" required maxlength="100">
+            </td>
+            <td>
+                <input type="number" class="form-control" form="save-{{ c.id }}" name="monthly_budget"
+                    value="{{ c.monthly_budget }}" min="0" step="0.01">
+            </td>
+            <td class="text-right text-nowrap">
+                <form id="save-{{ c.id }}" action="/categories/{{ c.id }}" method="post" class="d-inline"></form>
+                <button class="btn btn-sm btn-outline-primary" form="save-{{ c.id }}">Save</button>
+                <a class="btn btn-sm btn-outline-secondary" href="/expenses?category_id={{ c.id }}">Expenses</a>
+                <form action="/categories/{{ c.id }}/delete" method="post" class="d-inline"
+                    onsubmit="return confirm('Delete the category {{ c.name }}?')">
+                    <button class="btn btn-sm btn-outline-danger" title="delete category">&times;</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3"><em>There are no categories.</em></td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

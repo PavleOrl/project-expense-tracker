@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+
+{% from "components/expense_form.html" import ExpenseForm %}
+
+{% block content %}
+<h2>Expenses</h2>
+
+<div class="card mb-4">
+    <div class="card-header"><strong>Add an expense</strong></div>
+    <div class="card-body pb-0">
+        {{ ExpenseForm("/expenses", categories, button="Add", today=today) }}
+    </div>
+</div>
+
+{# the filter uses the method GET: the values travel in the address, so a filtered list can be bookmarked #}
+<form class="form-inline mb-3" action="/expenses" method="get">
+    <select class="custom-select mr-2 mb-2" name="category_id">
+        <option value="">All categories</option>
+        {% for c in categories %}
+        <option value="{{ c.id }}" {{ 'selected' if c.id == category_id }}>{{ c.name }}</option>
+        {% endfor %}
+    </select>
+    <input type="month" class="form-control mr-2 mb-2" name="month" value="{{ month }}">
+    <input class="form-control mr-2 mb-2" name="text" value="{{ text }}" placeholder="Description contains...">
+    <button class="btn btn-secondary mr-2 mb-2">Filter</button>
+    <a class="btn btn-link mb-2" href="/expenses">Show all</a>
+</form>
+
+<table class="table table-hover">
+    <thead class="thead-light">
+        <tr>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th class="text-right">Amount</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for e in expenses %}
+        <tr>
+            <td>{{ e.date.strftime("%d.%m.%Y") }}</td>
+            {# a click on the description leads to the page with the details of the expense #}
+            <td><a href="/expensedetail/{{ e.id }}">{{ e.description }}</a></td>
+            <td><span class="badge badge-info">{{ e.category_name }}</span></td>
+            <td class="text-right">{{ e.amount | money }}</td>
+            <td class="text-right">
+                <form action="/expenses/{{ e.id }}/delete" method="post" class="m-0"
+                    onsubmit="return confirm('Delete this expense?')">
+                    <button class="btn btn-sm btn-outline-danger" title="delete expense">&times;</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5"><em>There are no expenses.</em></td></tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr class="font-weight-bold">
+            <td colspan="3">Total ({{ expenses | length }})</td>
+            <td class="text-right">{{ total | money }}</td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>
+{% endblock %}

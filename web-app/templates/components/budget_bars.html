@@ -1,0 +1,35 @@
+{#
+    The component BudgetBars: for every category, how much has been spent against its monthly budget.
+    The bar is green under 80% of the budget, yellow from 80% to 100%, and red over the budget.
+    A category without a budget gets a grey bar and no percentage.
+
+    rows - a list of dictionaries made by the page dashboard: category, spent, budget, percent
+#}
+{% macro BudgetBars(rows) %}
+{% for row in rows %}
+{% if row.percent is none %}
+    {% set color, width = "bg-secondary", 100 %}
+{% elif row.percent > 100 %}
+    {% set color, width = "bg-danger", 100 %}
+{% elif row.percent >= 80 %}
+    {% set color, width = "bg-warning", row.percent %}
+{% else %}
+    {% set color, width = "bg-success", row.percent %}
+{% endif %}
+<div class="mb-2">
+    <div class="d-flex justify-content-between small">
+        <a href="/expenses?category_id={{ row.category.id }}">{{ row.category.name }}</a>
+        <span>
+            {{ row.spent | money }}
+            {% if row.percent is not none %} of {{ row.budget | money }} ({{ row.percent }}%){% endif %}
+            {% if row.percent is not none and row.percent > 100 %}<span class="badge badge-danger">over budget</span>{% endif %}
+        </span>
+    </div>
+    <div class="progress">
+        <div class="progress-bar {{ color }}" role="progressbar" style="width: {{ width }}%"></div>
+    </div>
+</div>
+{% else %}
+<p class="text-muted">There are no expenses in this month.</p>
+{% endfor %}
+{% endmacro %}

@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% from "components/budget_bars.html" import BudgetBars %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <a class="btn btn-outline-secondary" href="/dashboard?month={{ previous_month }}">&larr; {{ previous_month }}</a>
+    <h2 class="m-0">Month {{ month }}</h2>
+    <a class="btn btn-outline-secondary" href="/dashboard?month={{ next_month }}">{{ next_month }} &rarr;</a>
+</div>
+
+<div class="row text-center mb-4">
+    <div class="col-md-4 mb-2">
+        <div class="card"><div class="card-body">
+            <div class="text-muted small">Spent this month</div>
+            <div class="h4 m-0">{{ total | money }}</div>
+        </div></div>
+    </div>
+    <div class="col-md-4 mb-2">
+        <div class="card"><div class="card-body">
+            <div class="text-muted small">Number of expenses</div>
+            <div class="h4 m-0">{{ count }}</div>
+        </div></div>
+    </div>
+    <div class="col-md-4 mb-2">
+        <div class="card"><div class="card-body">
+            <div class="text-muted small">Largest expense</div>
+            <div class="h4 m-0">
+                {% if largest %}
+                <a href="/expensedetail/{{ largest.id }}">{{ largest.amount | money }}</a>
+                {% else %}-{% endif %}
+            </div>
+        </div></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <h4>Budget by category</h4>
+        {{ BudgetBars(budget_rows) }}
+        <a href="/expenses?month={{ month }}">See all expenses of this month</a>
+        &middot; <a href="/categories">Change the budgets</a>
+    </div>
+    <div class="col-md-6 mb-4">
+        <h4>Latest expenses</h4>
+        <div class="list-group">
+            {% for e in latest %}
+            <a class="list-group-item list-group-item-action d-flex justify-content-between" href="/expensedetail/{{ e.id }}">
+                <span>{{ e.date.strftime("%d.%m.") }} {{ e.description }}</span>
+                <span>{{ e.amount | money }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

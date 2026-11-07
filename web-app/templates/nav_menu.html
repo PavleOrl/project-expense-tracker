@@ -1,0 +1,19 @@
+{# The menu: links to the pages. The link of the page that is shown gets the class "active". #}
+{% set current = request.url.path %}
+
+<nav class="navbar navbar-expand navbar-dark bg-dark mb-4">
+    <div class="container flex-wrap">
+        <a class="navbar-brand" href="/dashboard">My Expenses</a>
+        <ul class="navbar-nav flex-wrap">
+            <li class="nav-item {{ 'active' if current == '/dashboard' }}">
+                <a class="nav-link" href="/dashboard">Dashboard</a>
+            </li>
+            <li class="nav-item {{ 'active' if current.startswith('/expense') }}">
+                <a class="nav-link" href="/expenses">Expenses</a>
+            </li>
+            <li class="nav-item {{ 'active' if current == '/categories' }}">
+                <a class="nav-link" href="/categories">Categories</a>
+            </li>
+        </ul>
+    </div>
+</nav>

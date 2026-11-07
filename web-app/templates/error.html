@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2>The RESTful service is not available</h2>
+
+<div class="alert alert-danger mt-3">
+    <p>
+        This application gets its data from the RESTful service at <code>{{ service_url }}</code>,
+        and the service did not give a usable answer.
+    </p>
+    <p>
+        Is the service running? Start it with <code>python main.py</code> in the folder
+        <code>rest-service</code>, and then load this page again.
+    </p>
+    <p class="mb-0"><small>{{ error }}</small></p>
+</div>
+{% endblock %}
